@@ -8,18 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		37B43F6822443DB800D99325 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B43F6722443DB800D99325 /* AppDelegate.swift */; };
-		37B43F6A22443DB800D99325 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B43F6922443DB800D99325 /* ViewController.swift */; };
 		37B43F6F22443DBA00D99325 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37B43F6E22443DBA00D99325 /* Assets.xcassets */; };
 		37B43F7222443DBA00D99325 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37B43F7022443DBA00D99325 /* LaunchScreen.storyboard */; };
+		94D11BA0224456FA009F5E54 /* TitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D11B9F224456FA009F5E54 /* TitleViewController.swift */; };
+		94D11BA22244606A009F5E54 /* AllCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D11BA12244606A009F5E54 /* AllCardsViewController.swift */; };
+		94D11BA5224460A3009F5E54 /* CreateEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D11BA4224460A3009F5E54 /* CreateEditViewController.swift */; };
+		94D11BA7224460E5009F5E54 /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D11BA6224460E5009F5E54 /* StudyViewController.swift */; };
+		94D11BA92244618C009F5E54 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D11BA82244618C009F5E54 /* FlashCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		37B43F6422443DB800D99325 /* FlashCards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37B43F6722443DB800D99325 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		37B43F6922443DB800D99325 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		37B43F6E22443DBA00D99325 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37B43F7122443DBA00D99325 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		37B43F7322443DBA00D99325 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94D11B9F224456FA009F5E54 /* TitleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleViewController.swift; sourceTree = "<group>"; };
+		94D11BA12244606A009F5E54 /* AllCardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCardsViewController.swift; sourceTree = "<group>"; };
+		94D11BA4224460A3009F5E54 /* CreateEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEditViewController.swift; sourceTree = "<group>"; };
+		94D11BA6224460E5009F5E54 /* StudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewController.swift; sourceTree = "<group>"; };
+		94D11BA82244618C009F5E54 /* FlashCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +61,11 @@
 			isa = PBXGroup;
 			children = (
 				37B43F6722443DB800D99325 /* AppDelegate.swift */,
-				37B43F6922443DB800D99325 /* ViewController.swift */,
+				94D11BA82244618C009F5E54 /* FlashCard.swift */,
+				94D11B9F224456FA009F5E54 /* TitleViewController.swift */,
+				94D11BA12244606A009F5E54 /* AllCardsViewController.swift */,
+				94D11BA4224460A3009F5E54 /* CreateEditViewController.swift */,
+				94D11BA6224460E5009F5E54 /* StudyViewController.swift */,
 				37B43F6E22443DBA00D99325 /* Assets.xcassets */,
 				37B43F7022443DBA00D99325 /* LaunchScreen.storyboard */,
 				37B43F7322443DBA00D99325 /* Info.plist */,
@@ -131,8 +143,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37B43F6A22443DB800D99325 /* ViewController.swift in Sources */,
+				94D11BA92244618C009F5E54 /* FlashCard.swift in Sources */,
+				94D11BA22244606A009F5E54 /* AllCardsViewController.swift in Sources */,
 				37B43F6822443DB800D99325 /* AppDelegate.swift in Sources */,
+				94D11BA0224456FA009F5E54 /* TitleViewController.swift in Sources */,
+				94D11BA7224460E5009F5E54 /* StudyViewController.swift in Sources */,
+				94D11BA5224460A3009F5E54 /* CreateEditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
