@@ -29,10 +29,18 @@ class AllCardsViewController: UIViewController {
         
         //testing flash card
         let fc: FlashCard = FlashCard(frame: cardFrame)
-        fc.backgroundColor = UIColor.white
+        fc.isUserInteractionEnabled = true
         
-        self.view.backgroundColor = UIColor.yellow
+        self.view.backgroundColor = bgColor
         self.view.addSubview(fc)
+        
+        fc.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(AllCardsViewController.handleTap(_:))))
+    }
+    
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
+        let fc1: FlashCard = recognizer.view as! FlashCard
+        print("tap?")
+        fc1.flipCard()
     }
     
     

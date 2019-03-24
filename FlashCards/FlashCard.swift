@@ -10,7 +10,7 @@ import UIKit
 
 class FlashCard: UIImageView {
     
-    let cardImage: UIImage? = UIImage(named: "")
+    let cardImage: UIImage? = UIImage(named: "index-card")
     
     var label: UILabel = UILabel()
     var qText: String = ""
@@ -42,14 +42,16 @@ class FlashCard: UIImageView {
     }
     
     func flipCard() {
-        showingFront = !showingFront
-        
-        if(showingFront) {
-            label.text = qText
-        }
-        else {
-            label.text = aText
-        }
+        print("flip?")
+        UIView.transition(with: self, duration: 1, options: UIView.AnimationOptions.transitionFlipFromRight, animations: { () -> Void in
+            self.showingFront = !self.showingFront
+            if(self.showingFront) {
+                self.label.text = self.qText
+            }
+            else {
+                self.label.text = self.aText
+            }
+        }, completion: nil)
     }
     
 }
