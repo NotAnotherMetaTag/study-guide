@@ -17,5 +17,8 @@ class StudyViewController: UIViewController {
         self.view.backgroundColor = bgColor
     }
     
-    
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
+        let fc1: FlashCard = recognizer.view as! FlashCard
+        fc1.flipCard()
+    }
 }

@@ -9,6 +9,8 @@
 import UIKit
 
 class FlashCard: UIImageView {
+    let TNQUESTION: String = "Question Text"
+    let TNANSWER: String = "Answer Text"
     
     let cardImage: UIImage? = UIImage(named: "index-card")
     
@@ -18,9 +20,9 @@ class FlashCard: UIImageView {
     
     var showingFront: Bool = true
     
-    override init(frame: CGRect) {
+    init() {
         super.init(image: cardImage)
-        self.frame = frame
+        self.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         qText = "Question"
         aText = "Answer"
         label.frame = CGRect(x: 10, y: 10, width: self.frame.width - 20, height: self.frame.height - 20)
@@ -38,7 +40,34 @@ class FlashCard: UIImageView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(image: cardImage)
+        qText = aDecoder.decodeObject(forKey: TNQUESTION) as? String ?? "Question"
+        aText = aDecoder.decodeObject(forKey: TNANSWER) as? String ?? "Answer"
+        
+        self.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
+        label.frame = CGRect(x: 10, y: 10, width: self.frame.width - 20, height: self.frame.height - 20)
+        label.text = qText
+        label.font = UIFont(name: "papyrus", size: 30)
+        
+        //scale down font size to fit frame
+        label.textAlignment = NSTextAlignment.center
+        label.baselineAdjustment = UIBaselineAdjustment.alignCenters
+        label.minimumScaleFactor = 0.001 //how small the font can be reduced
+        label.numberOfLines = 8 //max number of lines for wrapping
+        label.adjustsFontSizeToFitWidth = true
+        
+        self.addSubview(label)
+    }
+    
+    override func encode(with aCoder: NSCoder) {
+        aCoder.encode(qText, forKey: TNQUESTION)
+        aCoder.encode(aText, forKey: TNANSWER)
+    }
+    
+    //updates frame and label frame based on it
+    func setFrame(f : CGRect) {
+        self.frame = f
+        label.frame = CGRect(x: 10, y: 10, width: self.frame.width - 20, height: self.frame.height - 20)
     }
     
     func flipCard() {

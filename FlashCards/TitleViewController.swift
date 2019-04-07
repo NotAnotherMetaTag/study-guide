@@ -10,6 +10,9 @@ import UIKit
 
 let bgColor = UIColor(red: 0.085, green: 0.527, blue: 0.903, alpha: 1)
 
+var deck: Deck = Deck()
+let fileController = FileController()
+
 class TitleViewController: UIViewController {
     
     private var enterButton: UIButton = UIButton()
@@ -45,6 +48,10 @@ class TitleViewController: UIViewController {
         
         enterButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(TitleViewController.handleTap(_:))))
         
+        //try and load the deck
+        fileController.loadDeck()
+        //deck = Deck()
+        //fileController.saveDeck()
     }//end viewDidLoad
     
     //handles enter button's tap to present all cards view controller
