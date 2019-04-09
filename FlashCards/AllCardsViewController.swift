@@ -18,9 +18,12 @@ class AllCardsViewController: UITableViewController {
     private let horizontalCenter: CGFloat = UIScreen.main.bounds.size.width / 2
     private let verticleOffset: CGFloat = UIScreen.main.bounds.size.height * 0.33
     private let cardHeight: CGFloat = 100
-    private let cardWidth: CGFloat = 200
+    private let cardWidth: CGFloat = UIScreen.main.bounds.size.width * 0.45
     
-    private var cardFrame: CGRect = CGRect()
+    
+    private var cardFrame1: CGRect = CGRect()
+    private var cardFrame2: CGRect = CGRect()
+    private var labelFrame: CGRect = CGRect()
     
     init() {
         super.init(style: UITableView.Style.plain)
@@ -32,7 +35,12 @@ class AllCardsViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardFrame = CGRect(x: 10, y: 10, width: cardWidth, height: cardHeight)
+        
+        cardFrame1 = CGRect(x: (UIScreen.main.bounds.size.width * 0.20) - (cardWidth / 2), y: 10, width: cardWidth, height: cardHeight)
+        cardFrame2 = CGRect(x: (UIScreen.main.bounds.size.width * 0.70) - (cardWidth / 2), y: 10, width: cardWidth, height: cardHeight)
+        labelFrame = CGRect(x: 5, y: 5, width: cardWidth - 10, height: cardHeight - 10)
+
+        
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -63,8 +71,36 @@ class AllCardsViewController: UITableViewController {
         let cardEntry = UIView(frame: CGRect(x: 0.05*tableView.frame.width, y: 0, width: 0.9*tableView.frame.width, height: cardHeight))
         cardEntry.tag = 1
         let card = deck.getCardAtIndex(index: indexPath.row)
-        card.setFrame(f: cardFrame)
-        cardEntry.addSubview(card)
+        
+        let cardImage: UIImageView = UIImageView(image: UIImage(named: "index-card"))
+        cardImage.frame = cardFrame1
+        let cardImage2: UIImageView = UIImageView(image: UIImage(named: "index-card"))
+        cardImage2.frame = cardFrame2
+        
+        let cardILabel1: UILabel = UILabel(frame: labelFrame)
+        cardILabel1.text = card.qText
+        cardILabel1.font = UIFont(name: "papyrus", size: 30)
+        //scale down font size to fit frame
+        cardILabel1.textAlignment = NSTextAlignment.center
+        cardILabel1.baselineAdjustment = UIBaselineAdjustment.alignCenters
+        cardILabel1.minimumScaleFactor = 0.001 //how small the font can be reduced
+        cardILabel1.numberOfLines = 8 //max number of lines for wrapping
+        cardILabel1.adjustsFontSizeToFitWidth = true
+        
+        let cardILabel2: UILabel = UILabel(frame: labelFrame)
+        cardILabel2.text = card.aText
+        cardILabel2.font = UIFont(name: "papyrus", size: 30)
+        //scale down font size to fit frame
+        cardILabel2.textAlignment = NSTextAlignment.center
+        cardILabel2.baselineAdjustment = UIBaselineAdjustment.alignCenters
+        cardILabel2.minimumScaleFactor = 0.001 //how small the font can be reduced
+        cardILabel2.numberOfLines = 8 //max number of lines for wrapping
+        cardILabel2.adjustsFontSizeToFitWidth = true
+        
+        cardImage.addSubview(cardILabel1)
+        cardImage2.addSubview(cardILabel2)
+        cardEntry.addSubview(cardImage)
+        cardEntry.addSubview(cardImage2)
         cell.backgroundColor = bgColor
         cell.contentView.addSubview(cardEntry)
         cardEntry.isUserInteractionEnabled = false

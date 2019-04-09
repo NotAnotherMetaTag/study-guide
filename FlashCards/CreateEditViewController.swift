@@ -12,7 +12,7 @@ class CreateEditViewController: UIViewController {
     let backButton: UIButton = UIButton()
     let saveButton: UIButton = UIButton()
     let deleteButton: UIButton = UIButton()
-    let cardWidth: CGFloat = UIScreen.main.bounds.size.width * 0.75
+    let cardWidth: CGFloat
     let cardHeight: CGFloat
     
     var cardFrame: CGRect
@@ -21,6 +21,7 @@ class CreateEditViewController: UIViewController {
     
     init?(fc: FlashCard) {
         card = fc
+        cardWidth = UIScreen.main.bounds.size.width * 0.75
         cardHeight  = cardWidth * 0.6
         cardFrame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - (cardWidth / 2), y:  (UIScreen.main.bounds.size.height / 2) - (cardHeight / 2), width: cardWidth, height: cardHeight)
         card.setFrame(f: cardFrame)
