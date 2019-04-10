@@ -43,4 +43,19 @@ class Deck: NSObject, NSCoding {
         }
     }
     
+    func isCardInDeck(fc: FlashCard) -> Bool{
+        if cards.contains(fc) {
+            return true
+        }
+        return false
+    }
+    
+    func setAllCardsShowingFront() {
+        for c in cards {
+            if c.showingFront == false {
+                c.flipCard()
+            }
+        }
+    }
+    
 }

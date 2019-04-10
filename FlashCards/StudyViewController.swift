@@ -14,6 +14,9 @@ class StudyViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        //make sure everything is showing front
+        deck.setAllCardsShowingFront()
+        
         self.view.backgroundColor = bgColor
     }
     

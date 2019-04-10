@@ -9,8 +9,8 @@
 import UIKit
 
 class FlashCard: UIImageView {
-    let TNQUESTION: String = "Question Text"
-    let TNANSWER: String = "Answer Text"
+    private let TNQUESTION: String = "Question Text"
+    private let TNANSWER: String = "Answer Text"
     
     let cardImage: UIImage? = UIImage(named: "index-card")
     
@@ -23,8 +23,8 @@ class FlashCard: UIImageView {
     init() {
         super.init(image: cardImage)
         self.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
-        qText = "Question"
-        aText = "Answer"
+        qText = "Q:"
+        aText = "A:"
         label.frame = CGRect(x: 10, y: 10, width: self.frame.width - 20, height: self.frame.height - 20)
         label.text = qText
         label.font = UIFont(name: "papyrus", size: 30)
@@ -41,8 +41,8 @@ class FlashCard: UIImageView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(image: cardImage)
-        qText = aDecoder.decodeObject(forKey: TNQUESTION) as? String ?? "Question"
-        aText = aDecoder.decodeObject(forKey: TNANSWER) as? String ?? "Answer"
+        qText = aDecoder.decodeObject(forKey: TNQUESTION) as? String ?? "Q:"
+        aText = aDecoder.decodeObject(forKey: TNANSWER) as? String ?? "A:"
         
         self.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         label.frame = CGRect(x: 10, y: 10, width: self.frame.width - 20, height: self.frame.height - 20)
@@ -71,7 +71,7 @@ class FlashCard: UIImageView {
     }
     
     func flipCard() {
-        print("flip?")
+        //print("flip?")
         UIView.transition(with: self, duration: 1, options: UIView.AnimationOptions.transitionFlipFromRight, animations: { () -> Void in
             self.showingFront = !self.showingFront
             if(self.showingFront) {

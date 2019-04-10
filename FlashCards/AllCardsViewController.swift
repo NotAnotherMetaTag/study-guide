@@ -19,11 +19,12 @@ class AllCardsViewController: UITableViewController {
     private let verticleOffset: CGFloat = UIScreen.main.bounds.size.height * 0.33
     private let cardHeight: CGFloat = 100
     private let cardWidth: CGFloat = UIScreen.main.bounds.size.width * 0.45
-    
-    
+
     private var cardFrame1: CGRect = CGRect()
     private var cardFrame2: CGRect = CGRect()
     private var labelFrame: CGRect = CGRect()
+    
+    private var overlayColor: UIColor = UIColor(red: 0.085, green: 0.793, blue: 0.727, alpha: 1)
     
     init() {
         super.init(style: UITableView.Style.plain)
@@ -120,8 +121,8 @@ class AllCardsViewController: UITableViewController {
         
         let frameHeight: CGFloat = 50.0
         let buttonContainer = UIView(frame: CGRect(x: 0, y: 40, width: view.frame.width, height: frameHeight))
-        buttonContainer.backgroundColor = bgColor
-        let title: UILabel = UILabel(frame: CGRect(x: view.frame.width * 0.25, y: 0, width: view.frame.width * 0.5, height: frameHeight))
+        buttonContainer.backgroundColor = overlayColor
+        let title: UILabel = UILabel(frame: CGRect(x: view.frame.width * 0.25, y: 10, width: view.frame.width * 0.5, height: frameHeight))
         title.text = "All My FlashCards"
         title.font = UIFont(name: "papyrus", size: 30)
         //scale down font size to fit frame
@@ -130,11 +131,11 @@ class AllCardsViewController: UITableViewController {
         title.minimumScaleFactor = 0.001 //how small the font can be reduced
         title.adjustsFontSizeToFitWidth = true
         
-        let newButton: UIButton = UIButton(frame: CGRect(x: view.frame.width * 0.80, y: 0, width: view.frame.width * 0.18, height: frameHeight))
+        let newButton: UIButton = UIButton(frame: CGRect(x: view.frame.width * 0.80, y: 5, width: view.frame.width * 0.18, height: frameHeight))
         newButton.setImage(UIImage(named: "newButton"), for: .normal)
         newButton.isUserInteractionEnabled = true
         
-        newButton.addTarget(self, action: #selector(AllCardsViewController.buttonPressed), for: UIControl.Event.touchUpInside)
+        newButton.addTarget(self, action: #selector(AllCardsViewController.newPressed), for: UIControl.Event.touchUpInside)
         
         buttonContainer.addSubview(title)
         buttonContainer.addSubview(newButton)
@@ -142,9 +143,54 @@ class AllCardsViewController: UITableViewController {
         return buttonContainer
     }
     
-    @objc func buttonPressed() {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let frameHeight: CGFloat = 50.0
+        let buttonContainer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: frameHeight))
+        buttonContainer.backgroundColor = overlayColor
+        
+        let buttonWidth: CGFloat = view.frame.width * 0.18
+        
+        let backButton: UIButton = UIButton(frame: CGRect(x: (view.frame.width * 0.33) - (buttonWidth / 2), y: 5, width: buttonWidth, height: frameHeight))
+        backButton.setImage(UIImage(named: "backButton"), for: .normal)
+        backButton.isUserInteractionEnabled = true
+        
+        let studyButton: UIButton = UIButton(frame: CGRect(x: (view.frame.width * 0.66) - (buttonWidth / 2), y: 5, width: buttonWidth, height: frameHeight))
+        studyButton.setImage(UIImage(named: "studyButton"), for: .normal)
+        studyButton.isUserInteractionEnabled = true
+        
+        backButton.addTarget(self, action: #selector(AllCardsViewController.backPressed), for: UIControl.Event.touchUpInside)
+        
+        studyButton.addTarget(self, action: #selector(AllCardsViewController.studyPressed), for: UIControl.Event.touchUpInside)
+        
+        buttonContainer.addSubview(backButton)
+        buttonContainer.addSubview(studyButton)
+        
+        return buttonContainer
+    }
+    
+    override func viewWillAppear(_ animated: Bool){
+        tableView.reloadData()
+    }
+    
+    @objc func newPressed() {
         self.present(CreateEditViewController(fc: FlashCard())!, animated: true, completion: {() -> Void in
             print("Create edit view controller presented...")
+        })
+    }
+    
+    @objc func backPressed() {
+        presentingViewController?.dismiss(animated: true, completion: {() -> Void in
+            print("All cards view controller dismissed...")
+        })
+    }
+    
+    @objc func studyPressed() {
+        self.present(StudyViewController(), animated: true, completion: {() -> Void in
+            print("Study view controller presented...")
         })
     }
     
