@@ -111,6 +111,9 @@ class CreateEditViewController: UIViewController {
     
     private func getQ() {
         let alert: UIAlertController = UIAlertController(title: "Set Question", message: "", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
+            //do nothing
+        }))
         alert.addAction(UIAlertAction(title: "Done", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
             self.card.label.text = (alert.textFields?[0].text)!
             self.card.qText = (alert.textFields?[0].text)!
@@ -125,6 +128,9 @@ class CreateEditViewController: UIViewController {
     
     private func getA() {
         let alert: UIAlertController = UIAlertController(title: "Set Answer", message: ":", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
+            //do nothing
+        }))
         alert.addAction(UIAlertAction(title: "Done", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
             self.card.label.text = (alert.textFields?[0].text)!
             self.card.aText = (alert.textFields?[0].text)!
