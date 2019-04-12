@@ -8,10 +8,10 @@
 
 import UIKit
 
-let dirPath: String = "\(NSHomeDirectory())/fcsa"
-let filePath: String = "\(NSHomeDirectory())/fcsa/deck.txt"
-
 class FileController {
+    
+    private let dirPath: String = "\(NSHomeDirectory())/fcsa"
+    private let filePath: String = "\(NSHomeDirectory())/fcsa/deck.txt"
     
     init() {
         createDirectory()

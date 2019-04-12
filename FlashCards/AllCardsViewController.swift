@@ -13,6 +13,8 @@ let CARDCELL: String = "CardCell"
 class AllCardsViewController: UITableViewController {
     
     private var newButton: UIButton = UIButton()
+    private var backButton: UIButton = UIButton()
+    private var studyButton: UIButton = UIButton()
     
     //offset and sizing info
     private let horizontalCenter: CGFloat = UIScreen.main.bounds.size.width / 2
@@ -47,6 +49,9 @@ class AllCardsViewController: UITableViewController {
         
         view.backgroundColor = bgColor
         tableView.backgroundColor = bgColor
+        
+        //make sure everything is showing front
+        deck.setAllCardsShowingFront()
         
         //testing flash card
         //var fc: FlashCard = FlashCard()
@@ -154,11 +159,11 @@ class AllCardsViewController: UITableViewController {
         
         let buttonWidth: CGFloat = view.frame.width * 0.18
         
-        let backButton: UIButton = UIButton(frame: CGRect(x: (view.frame.width * 0.33) - (buttonWidth / 2), y: 5, width: buttonWidth, height: frameHeight))
+        backButton = UIButton(frame: CGRect(x: (view.frame.width * 0.33) - (buttonWidth / 2), y: 5, width: buttonWidth, height: frameHeight))
         backButton.setImage(UIImage(named: "backButton"), for: .normal)
         backButton.isUserInteractionEnabled = true
         
-        let studyButton: UIButton = UIButton(frame: CGRect(x: (view.frame.width * 0.66) - (buttonWidth / 2), y: 5, width: buttonWidth, height: frameHeight))
+        studyButton = UIButton(frame: CGRect(x: (view.frame.width * 0.66) - (buttonWidth / 2), y: 5, width: buttonWidth, height: frameHeight))
         studyButton.setImage(UIImage(named: "studyButton"), for: .normal)
         studyButton.isUserInteractionEnabled = true
         
@@ -189,9 +194,22 @@ class AllCardsViewController: UITableViewController {
     }
     
     @objc func studyPressed() {
-        self.present(StudyViewController(), animated: true, completion: {() -> Void in
-            print("Study view controller presented...")
-        })
+        if deck.count > 0 {
+            self.present(StudyViewController(), animated: true, completion: {() -> Void in
+                print("Study view controller presented...")
+            })
+        }
+        else {
+            let alert: UIAlertController = UIAlertController(title: "You have no flashcards!", message: "Time to make one!", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
+                self.present(CreateEditViewController(fc: FlashCard())!, animated: true, completion: {() -> Void in
+                    print("Create edit view controller presented...")
+                })
+            }))
+            self.present(alert, animated: false, completion: {() -> Void in
+                //TODO: save state of card
+            })
+        }
     }
     
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {

@@ -9,21 +9,20 @@
 import UIKit
 
 class CreateEditViewController: UIViewController {
-    let backButton: UIButton = UIButton()
-    let saveButton: UIButton = UIButton()
-    let deleteButton: UIButton = UIButton()
-    var buttonContainer: UIView = UIView()
-    let frameHeight: CGFloat = 50.0
+    private var instructionLabel: UILabel = UILabel()
+    private let backButton: UIButton = UIButton()
+    private let saveButton: UIButton = UIButton()
+    private let deleteButton: UIButton = UIButton()
+    private var buttonContainer: UIView = UIView()
+    private let frameHeight: CGFloat = 50.0
     
-    let cardWidth: CGFloat
-    let cardHeight: CGFloat
+    private let cardWidth: CGFloat
+    private let cardHeight: CGFloat
+    private var cardFrame: CGRect
+    private var card: FlashCard
     
-    var cardFrame: CGRect
-    
-    var card: FlashCard
-    
-    var originalQuestion: String
-    var originalAnswer: String
+    private var originalQuestion: String
+    private var originalAnswer: String
     
     init?(fc: FlashCard) {
         card = fc
@@ -48,6 +47,17 @@ class CreateEditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        instructionLabel = UILabel(frame: CGRect(x: view.frame.width * 0.12, y: 40, width: view.frame.width * 0.75, height: view.frame.height * 0.25))
+        instructionLabel.text = "Tap flashcard to flip it.\nSwipe it to change text."
+        instructionLabel.textColor = UIColor.black
+        instructionLabel.font = UIFont(name: "papyrus", size: 40)
+        //scale down font size to fit frame
+        instructionLabel.textAlignment = NSTextAlignment.center
+        instructionLabel.baselineAdjustment = UIBaselineAdjustment.alignCenters
+        instructionLabel.minimumScaleFactor = 0.001 //how small the font can be reduced
+        instructionLabel.adjustsFontSizeToFitWidth = true
+        instructionLabel.numberOfLines = 2
         
         let buttonWidth = view.frame.width * 0.22
         
@@ -89,6 +99,7 @@ class CreateEditViewController: UIViewController {
         swipeR.direction = UISwipeGestureRecognizer.Direction.right
         buttonContainer.addGestureRecognizer(swipeR)
         
+        self.view.addSubview(instructionLabel)
         self.view.addSubview(card)
         self.view.addSubview(buttonContainer)
         self.view.addSubview(backButton)
@@ -126,25 +137,19 @@ class CreateEditViewController: UIViewController {
         })
     }
     
-    //On tap of card, pop up keyboard & enable edit of label text
+    //on tap, flip card
     @objc func newCardHandleTap(_ recognizer: UITapGestureRecognizer) {
+        card.flipCard()
+    }
+    
+    //on swipe, edit text on this side of card
+    @objc func handleSwipe(_ recognizer: UITapGestureRecognizer) {
         //if showing question side of card
         if(card.showingFront == true) {
             getQ()
         } else {
             getA()
         }
-        
-        //showing answer side of card
-        if(card.showingFront == false) {
-            getA()
-        } else {
-            getQ()
-        }
-    }
-    
-    @objc func handleSwipe(_ recognizer: UITapGestureRecognizer) {
-        card.flipCard()
     }
     
     //When pressed, discard information and go back to AllCards view.
