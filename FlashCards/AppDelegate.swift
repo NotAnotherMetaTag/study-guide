@@ -5,6 +5,9 @@
 //  Created by Emily Clark on 3/21/19.
 //  Copyright © 2019 Emily Clark. All rights reserved.
 //
+//  Description:  Basic AppDelegate class, nothing fancy here.
+//                Loads TitleViewController to begin the app.
+//
 
 import UIKit
 
