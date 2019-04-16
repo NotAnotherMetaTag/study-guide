@@ -166,8 +166,15 @@ class AllCardsViewController: UITableViewController {
         
         newButton.addTarget(self, action: #selector(AllCardsViewController.newPressed), for: UIControl.Event.touchUpInside)
         
+        let deleteAllButton: UIButton = UIButton(frame: CGRect(x: (view.frame.width * 0.03), y: 5, width: view.frame.width * 0.18, height: frameHeight))
+        deleteAllButton.setImage(UIImage(named: "deleteAllButton"), for: .normal)
+        deleteAllButton.isUserInteractionEnabled = true
+        
+        deleteAllButton.addTarget(self, action: #selector(AllCardsViewController.deleteButtonPressed), for: UIControl.Event.touchUpInside)
+        
         buttonContainer.addSubview(title)
         buttonContainer.addSubview(newButton)
+        buttonContainer.addSubview(deleteAllButton)
         
         return buttonContainer
     }
@@ -261,5 +268,26 @@ class AllCardsViewController: UITableViewController {
         }
         
     }
-    
+    //this delete button removes ALL cards in the deck
+    @objc func deleteButtonPressed(_ recognizer: UITapGestureRecognizer) {
+        let alert: UIAlertController = UIAlertController(title: "Are you sure?", message: "Deleted flash cards can not be recovered. This will delete ALL cards.", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Keep All", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
+            //do nothing
+        }))
+        alert.addAction(UIAlertAction(title: "Delete All", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
+            //only need to make changes if there are any cards in deck
+            if (deck.count > 0) {
+                deck = Deck()
+                
+                //save the deck
+                fileController.saveDeck()
+                self.tableView.reloadData()
+            }
+            
+        }))
+        
+        self.present(alert, animated: false, completion: {() -> Void in
+            
+        })
+    }
 }
