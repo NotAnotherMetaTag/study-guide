@@ -21,6 +21,7 @@ class AllCardsViewController: UITableViewController {
     private var newButton: UIButton = UIButton()
     private var backButton: UIButton = UIButton()
     private var studyButton: UIButton = UIButton()
+    private var deleteAllButton: UIButton = UIButton()
     
     // offset and sizing info
     private let horizontalCenter: CGFloat = UIScreen.main.bounds.size.width / 2
@@ -160,13 +161,13 @@ class AllCardsViewController: UITableViewController {
         title.adjustsFontSizeToFitWidth = true
         
         // used to create a new card
-        let newButton: UIButton = UIButton(frame: CGRect(x: view.frame.width * 0.80, y: 5, width: view.frame.width * 0.18, height: frameHeight))
+        newButton = UIButton(frame: CGRect(x: view.frame.width * 0.80, y: 5, width: view.frame.width * 0.18, height: frameHeight))
         newButton.setImage(UIImage(named: "newButton"), for: .normal)
         newButton.isUserInteractionEnabled = true
         
         newButton.addTarget(self, action: #selector(AllCardsViewController.newPressed), for: UIControl.Event.touchUpInside)
         
-        let deleteAllButton: UIButton = UIButton(frame: CGRect(x: (view.frame.width * 0.03), y: 5, width: view.frame.width * 0.18, height: frameHeight))
+        deleteAllButton = UIButton(frame: CGRect(x: (view.frame.width * 0.03), y: 5, width: view.frame.width * 0.18, height: frameHeight))
         deleteAllButton.setImage(UIImage(named: "deleteAllButton"), for: .normal)
         deleteAllButton.isUserInteractionEnabled = true
         
@@ -268,26 +269,27 @@ class AllCardsViewController: UITableViewController {
         }
         
     }
-    //this delete button removes ALL cards in the deck
+    // this delete button removes ALL cards in the deck
     @objc func deleteButtonPressed(_ recognizer: UITapGestureRecognizer) {
         let alert: UIAlertController = UIAlertController(title: "Are you sure?", message: "Deleted flash cards can not be recovered. This will delete ALL cards.", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Keep All", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
-            //do nothing
+            // do nothing
         }))
         alert.addAction(UIAlertAction(title: "Delete All", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) -> Void in
-            //only need to make changes if there are any cards in deck
+            // only need to make changes if there are any cards in deck
             if (deck.count > 0) {
                 deck = Deck()
                 
-                //save the deck
+                // save the deck
                 fileController.saveDeck()
+                // update the table
                 self.tableView.reloadData()
             }
             
         }))
         
         self.present(alert, animated: false, completion: {() -> Void in
-            
+            // all done
         })
     }
 }

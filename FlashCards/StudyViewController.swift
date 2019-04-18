@@ -12,7 +12,9 @@
 //                there is more than one card.  A deck of size 1
 //                can not be swiped through, the card will just
 //                wiggle.  Cards always show question when coming
-//                into view.
+//                into view.  Cards can also be shuffled, though
+//                the original order is maintained for AllCardsView
+//                and future study sessions.
 //
 //                The deck shouldn't be empty when coming here
 //                but this view does check just in case. Currently
@@ -88,17 +90,17 @@ class StudyViewController: UIViewController {
         // update the card's frame and it's label's frame
         card.setFrame(f: cardFrame)
         
-        //make sure everything is showing front
+        // make sure everything is showing front
         deck.setAllCardsShowingFront()
         
         // button to dismiss the view
-        backButton = UIButton(frame: CGRect(x: ((view.frame.width/3) * 2 - (buttonWidth/2) ), y: buttonVerticleOffset, width: buttonWidth, height: buttonHeight))
+        backButton = UIButton(frame: CGRect(x: ((view.frame.width/3) - 5 - (buttonWidth/2) ), y: buttonVerticleOffset, width: buttonWidth, height: buttonHeight))
         backButton.setImage(UIImage(named: "backButton"), for: .normal)
         backButton.isUserInteractionEnabled = true
         backButton.addTarget(self, action: #selector(StudyViewController.backButtonPressed), for: UIControl.Event.touchUpInside)
         
         // button to shuffle the cards
-        shuffleButton = UIButton(frame: CGRect(x: ((view.frame.width / 3) - (buttonWidth/2)) , y: buttonVerticleOffset, width: buttonWidth, height: buttonHeight))
+        shuffleButton = UIButton(frame: CGRect(x: ((view.frame.width / 3) * 2 + 5 - (buttonWidth/2)) , y: buttonVerticleOffset, width: buttonWidth, height: buttonHeight))
         shuffleButton.setImage(UIImage(named: "shuffleButton"), for: .normal)
         shuffleButton.isUserInteractionEnabled = true
         shuffleButton.addTarget(self, action: #selector(StudyViewController.shuffleButtonPressed), for: UIControl.Event.touchUpInside)
@@ -124,6 +126,7 @@ class StudyViewController: UIViewController {
         self.view.addSubview(backButton)
         self.view.addSubview(shuffleButton)
         
+        // non-shuffled indexes
         self.deckIndexes = []
         for i in 0..<(self.deckSize) {
             self.deckIndexes.append(i)
@@ -138,15 +141,11 @@ class StudyViewController: UIViewController {
     // go to next card
     @objc func handleSwipeLeft(_ recognizer: UITapGestureRecognizer) {
         // more than 1 card, move to next
-        print(deckIndexes)
         if deckSize > 1 {
             var nextIndex = currentDeckIndex + 1
             if nextIndex >= deckSize {
                 nextIndex = 0
             }
-            print(deckIndexes)
-            print(deckSize)
-            print(nextIndex)
             if(isShuffled) {
                 let nextCard: FlashCard = deck.getCardAtIndex(index: deckIndexes[nextIndex])
                 updateCardFrame(newCard: nextCard, index: nextIndex, isRightSwipe: true)
@@ -174,9 +173,6 @@ class StudyViewController: UIViewController {
             if prevIndex < 0 {
                 prevIndex = deckSize-1
             }
-            print(deckIndexes)
-            print(deckSize)
-            print(prevIndex)
             if(isShuffled) {
                 let prevCard: FlashCard = deck.getCardAtIndex(index: deckIndexes[prevIndex])
                 updateCardFrame(newCard: prevCard, index: prevIndex, isRightSwipe: false)
@@ -216,17 +212,28 @@ class StudyViewController: UIViewController {
         })
     }
     
-    //shuffle cards for study
+    // shuffle cards for study
     @objc func shuffleButtonPressed(_ recognizer: UITapGestureRecognizer) {
-       //reset deckIndexes array if the button is pressed again
+       // reset deckIndexes array if the button is pressed again
         deckIndexes = []
         for i in 0..<(deckSize) {
             deckIndexes.append(i)
         }
         deckIndexes.shuffle()
         isShuffled = true
+        
+        // need to reset what card is shown to first in deckIndexes
+        currentDeckIndex = 0
+        self.card.removeFromSuperview()
+        card = deck.getCardAtIndex(index: deckIndexes[0])
+        card.setFrame(f: cardFrame)
+        // just in case
+        deck.setAllCardsShowingFront()
+        self.view.addSubview(card)
+        //print(deckIndexes) //for debugging
     }
     
+    // handles the card animation forward or backward
     func updateCardFrame(newCard: FlashCard, index: Int, isRightSwipe: Bool) {
         // update the card's frame and it's label's frame
         newCard.setFrame(f: cardFrame)
