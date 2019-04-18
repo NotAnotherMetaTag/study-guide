@@ -28,6 +28,8 @@ class StudyViewController: UIViewController {
     // updated in viewDidLoad
     private var card: FlashCard = FlashCard()
     private var deckSize: Int = 0
+    private var deckIndexes: [Int] = []
+    private var isShuffled: Bool = false
     
     // keeps track of where we are in the deck
     private var currentDeckIndex: Int = 0
@@ -41,6 +43,7 @@ class StudyViewController: UIViewController {
     private var cardFrame: CGRect = CGRect()
     
     private var backButton: UIButton = UIButton()
+    private var shuffleButton: UIButton = UIButton()
     private let buttonHeight: CGFloat = 66
     private let buttonWidth: CGFloat = 138
     private let buttonVerticleOffset: CGFloat = UIScreen.main.bounds.size.height * 0.75
@@ -89,10 +92,16 @@ class StudyViewController: UIViewController {
         deck.setAllCardsShowingFront()
         
         // button to dismiss the view
-        backButton = UIButton(frame: CGRect(x: horizontalCenter - (buttonWidth / 2), y: buttonVerticleOffset, width: buttonWidth, height: buttonHeight))
+        backButton = UIButton(frame: CGRect(x: ((view.frame.width/3) * 2 - (buttonWidth/2) ), y: buttonVerticleOffset, width: buttonWidth, height: buttonHeight))
         backButton.setImage(UIImage(named: "backButton"), for: .normal)
         backButton.isUserInteractionEnabled = true
         backButton.addTarget(self, action: #selector(StudyViewController.backButtonPressed), for: UIControl.Event.touchUpInside)
+        
+        // button to shuffle the cards
+        shuffleButton = UIButton(frame: CGRect(x: ((view.frame.width / 3) - (buttonWidth/2)) , y: buttonVerticleOffset, width: buttonWidth, height: buttonHeight))
+        shuffleButton.setImage(UIImage(named: "shuffleButton"), for: .normal)
+        shuffleButton.isUserInteractionEnabled = true
+        shuffleButton.addTarget(self, action: #selector(StudyViewController.shuffleButtonPressed), for: UIControl.Event.touchUpInside)
         
         // setup hit box and gestures
         cardHitBox = UIView(frame: cardFrame)
@@ -113,6 +122,12 @@ class StudyViewController: UIViewController {
         self.view.addSubview(card)
         self.view.addSubview(cardHitBox)
         self.view.addSubview(backButton)
+        self.view.addSubview(shuffleButton)
+        
+        self.deckIndexes = []
+        for i in 0..<(self.deckSize) {
+            self.deckIndexes.append(i)
+        }
     }
     
     // flip card
@@ -123,32 +138,22 @@ class StudyViewController: UIViewController {
     // go to next card
     @objc func handleSwipeLeft(_ recognizer: UITapGestureRecognizer) {
         // more than 1 card, move to next
+        print(deckIndexes)
         if deckSize > 1 {
             var nextIndex = currentDeckIndex + 1
             if nextIndex >= deckSize {
                 nextIndex = 0
             }
-            let nextCard: FlashCard = deck.getCardAtIndex(index: nextIndex)
-            
-            // update the card's frame and it's label's frame
-            nextCard.setFrame(f: cardFrame)
-            nextCard.center.x = UIScreen.main.bounds.size.width + 5 + (cardWidth / 2)
-            self.view.addSubview(nextCard)
-            UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
-                () -> Void in
-                nextCard.center.x = self.horizontalCenter
-                self.card.center.x = -5 - (self.cardWidth / 2)
-            }, completion: {
-                (Bool) -> Void in
-                // make it show front for next time
-                if self.card.showingFront == false {
-                    self.card.flipCard()
-                }
-                // clean up views
-                self.currentDeckIndex = nextIndex
-                self.card.removeFromSuperview()
-                self.card = nextCard
-            })
+            print(deckIndexes)
+            print(deckSize)
+            print(nextIndex)
+            if(isShuffled) {
+                let nextCard: FlashCard = deck.getCardAtIndex(index: deckIndexes[nextIndex])
+                updateCardFrame(newCard: nextCard, index: nextIndex, isRightSwipe: true)
+            } else {
+               let nextCard: FlashCard = deck.getCardAtIndex(index: nextIndex)
+                updateCardFrame(newCard: nextCard, index: nextIndex, isRightSwipe: true)
+            }
         } else {
             // only one card so wiggle it
             UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
@@ -167,29 +172,18 @@ class StudyViewController: UIViewController {
         if deckSize > 1 {
             var prevIndex = currentDeckIndex - 1
             if prevIndex < 0 {
-                prevIndex = deckSize - 1
+                prevIndex = deckSize-1
             }
-            let prevCard: FlashCard = deck.getCardAtIndex(index: prevIndex)
-            
-            // update the card's frame and it's label's frame
-            prevCard.setFrame(f: cardFrame)
-            prevCard.center.x = -5 - (cardWidth / 2)
-            self.view.addSubview(prevCard)
-            UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
-                () -> Void in
-                prevCard.center.x = self.horizontalCenter
-                self.card.center.x = UIScreen.main.bounds.size.width + 5 + (self.cardWidth / 2)
-            }, completion: {
-                (Bool) -> Void in
-                // make it show front for next time
-                if self.card.showingFront == false {
-                    self.card.flipCard()
-                }
-                // clean up views
-                self.currentDeckIndex = prevIndex
-                self.card.removeFromSuperview()
-                self.card = prevCard
-            })
+            print(deckIndexes)
+            print(deckSize)
+            print(prevIndex)
+            if(isShuffled) {
+                let prevCard: FlashCard = deck.getCardAtIndex(index: deckIndexes[prevIndex])
+                updateCardFrame(newCard: prevCard, index: prevIndex, isRightSwipe: false)
+            } else {
+                let prevCard: FlashCard = deck.getCardAtIndex(index: prevIndex)
+                updateCardFrame(newCard: prevCard, index: prevIndex, isRightSwipe: false)
+            }
         } else {
             // only one card so wiggle it
             UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
@@ -217,7 +211,50 @@ class StudyViewController: UIViewController {
         self.presentingViewController?.dismiss(animated: false, completion: {
             () -> Void in
             print("Study view controller dismissed...")
+            //also return deck to original
+            self.isShuffled = false
         })
     }
     
+    //shuffle cards for study
+    @objc func shuffleButtonPressed(_ recognizer: UITapGestureRecognizer) {
+       //reset deckIndexes array if the button is pressed again
+        deckIndexes = []
+        for i in 0..<(deckSize) {
+            deckIndexes.append(i)
+        }
+        deckIndexes.shuffle()
+        isShuffled = true
+    }
+    
+    func updateCardFrame(newCard: FlashCard, index: Int, isRightSwipe: Bool) {
+        // update the card's frame and it's label's frame
+        newCard.setFrame(f: cardFrame)
+        if(isRightSwipe) {
+            newCard.center.x = UIScreen.main.bounds.size.width + 5 + (cardWidth / 2)
+        } else {
+            newCard.center.x = -5 - (cardWidth / 2)
+        }
+        self.view.addSubview(newCard)
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+            () -> Void in
+            if(isRightSwipe) {
+                newCard.center.x = self.horizontalCenter
+                self.card.center.x = -5 - (self.cardWidth / 2)
+            } else {
+                newCard.center.x = self.horizontalCenter
+                self.card.center.x = UIScreen.main.bounds.size.width + 5 + (self.cardWidth / 2)
+            }
+        }, completion: {
+            (Bool) -> Void in
+            // make it show front for next time
+            if self.card.showingFront == false {
+                self.card.flipCard()
+            }
+            // clean up views
+            self.currentDeckIndex = index
+            self.card.removeFromSuperview()
+            self.card = newCard
+    })
+}
 }
