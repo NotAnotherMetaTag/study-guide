@@ -204,7 +204,7 @@ class StudyViewController: UIViewController {
     
     // dismiss the view
     @objc func backButtonPressed(_ recognizer: UITapGestureRecognizer) {
-        self.presentingViewController?.dismiss(animated: false, completion: {
+        self.presentingViewController?.dismiss(animated: true, completion: {
             () -> Void in
             print("Study view controller dismissed...")
             //also return deck to original
